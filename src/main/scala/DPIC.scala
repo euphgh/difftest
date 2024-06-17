@@ -130,6 +130,9 @@ abstract class DPICBase(config: GatewayConfig) extends ExtModule with HasExtModu
            |`endif
            |""".stripMargin
       else ""
+    val dummyWire = dpicFuncArgs.flatten.map{
+      case (name, _) => s"($name ^)"
+    }.mkString("&& ")
     val modDef =
       s"""
          |module $desiredName(
@@ -143,6 +146,9 @@ abstract class DPICBase(config: GatewayConfig) extends ExtModule with HasExtModu
          |    if (enable)
          |      $dpicFuncName (${dpicFuncArgs.flatten.map(_._1).mkString(", ")});
          |  end
+         |`endif
+         |`ifdef REMU_TRANSFORM
+         | (* __emu_common_port *) wire dummy = $dummyWire;
          |`endif
          |`endif
          |endmodule
