@@ -96,7 +96,12 @@ case class GatewayResult(
 
 object Gateway {
   private val instances = ListBuffer.empty[DifftestBundle]
-  private var config = GatewayConfig()
+  private val remu_config = GatewayConfig(
+    hasGlobalEnable=true,
+    isSquash = true,
+  )
+  private val default_config = GatewayConfig()
+  private var config = remu_config
 
   def setConfig(cfg: String): Unit = {
     cfg.foreach {

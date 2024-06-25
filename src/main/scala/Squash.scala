@@ -142,10 +142,29 @@ class SquashControl(config: GatewayConfig) extends ExtModule with HasExtModuleIn
   val clock = IO(Input(Clock()))
   val reset = IO(Input(Reset()))
   val enable = IO(Output(Bool()))
-
-  setInline(
-    "SquashControl.v",
+  val remuCode = 
     s"""
+       |module SquashControl(
+       |  input clock,
+       |  input reset,
+       |  output reg enable
+       |);
+       |
+       |reg [15:0] n_cycles;
+       |always @(posedge clock) begin
+       |  if (reset) begin
+       |    n_cycles <= 16'h0;
+       |  end
+       |  else begin
+       |    n_cycles <= (n_cycles + 16'h1) & 16'd1023;
+       |    enable <= n_cycles == 16'd1023;
+       |  end
+       |end
+       |
+       |endmodule;
+       |""".stripMargin
+
+  val simCode = s"""
        |module SquashControl(
        |  input clock,
        |  input reset,
@@ -193,6 +212,7 @@ class SquashControl(config: GatewayConfig) extends ExtModule with HasExtModuleIn
        |
        |
        |endmodule;
-       |""".stripMargin,
-  )
+       |""".stripMargin
+
+  setInline("SquashControl.v", remuCode)
 }

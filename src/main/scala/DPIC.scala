@@ -133,6 +133,16 @@ abstract class DPICBase(config: GatewayConfig) extends ExtModule with HasExtModu
     val dummyWire = dpicFuncArgs.flatten.map{
       case (name, _) => s"($name ^)"
     }.mkString("&& ")
+    val remuCode = 
+      s"""
+         |EmuTraceEnablePort #(
+         |  .DATA_WIDTH(${dpicFuncArgs.flatten.map(_._2.getWidth).sum})
+         |) emu_trace_enable_port_$dpicFuncName (
+         |  .clk(clock),
+         |  .enable(enable),
+         |  .data({${dpicFuncArgs.flatten.map(_._1).mkString(", ")}})
+         |);
+         |""".stripMargin
     val modDef =
       s"""
          |module $desiredName(
@@ -148,7 +158,7 @@ abstract class DPICBase(config: GatewayConfig) extends ExtModule with HasExtModu
          |  end
          |`endif
          |`ifdef REMU_TRANSFORM
-         | (* __emu_common_port *) wire dummy = $dummyWire;
+         |$remuCode
          |`endif
          |`endif
          |endmodule
