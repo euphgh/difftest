@@ -161,7 +161,7 @@ class SquashControl(config: GatewayConfig) extends ExtModule with HasExtModuleIn
        |  end
        |end
        |
-       |endmodule;
+       |endmodule
        |""".stripMargin
 
   val simCode = s"""
@@ -211,7 +211,7 @@ class SquashControl(config: GatewayConfig) extends ExtModule with HasExtModuleIn
        |end
        |
        |
-       |endmodule;
+       |endmodule
        |""".stripMargin
 
   setInline("SquashControl.v", remuCode)

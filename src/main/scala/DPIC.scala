@@ -157,9 +157,9 @@ abstract class DPICBase(config: GatewayConfig) extends ExtModule with HasExtModu
          |      $dpicFuncName (${dpicFuncArgs.flatten.map(_._1).mkString(", ")});
          |  end
          |`endif
+         |`endif
          |`ifdef REMU_TRANSFORM
          |$remuCode
-         |`endif
          |`endif
          |endmodule
          |""".stripMargin
