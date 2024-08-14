@@ -292,6 +292,7 @@ object DifftestModule {
   private val instances = ListBuffer.empty[DifftestBundle]
   private val cppMacros = ListBuffer.empty[String]
   private val vMacros = ListBuffer.empty[String]
+  private val remuEnable = true
 
   def parseArgs(args: Array[String]): Array[String] = {
     @tailrec
@@ -333,7 +334,7 @@ object DifftestModule {
     generateCppHeader(cpu, gateway.structPacked.getOrElse(false))
     generateVeriogHeader()
 
-    if (enabled) {
+    if (enabled && !remuEnable) {
       createTopIOs(gateway.step.getOrElse(0.U))
     } else {
       WireInit(0.U.asTypeOf(new DifftestTopIO))
