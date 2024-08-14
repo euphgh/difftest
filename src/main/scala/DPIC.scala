@@ -135,9 +135,9 @@ abstract class DPICBase(config: GatewayConfig) extends ExtModule with HasExtModu
     }.mkString("&& ")
     val remuCode = 
       s"""
-         |EmuTraceEnablePort #(
+         |EmuTracePort #(
          |  .DATA_WIDTH(${dpicFuncArgs.flatten.map(_._2.getWidth).sum})
-         |) emu_trace_enable_port_$dpicFuncName (
+         |) tk_$dpicFuncName (
          |  .clk(clock),
          |  .enable(enable),
          |  .data({${dpicFuncArgs.flatten.map(_._1).mkString(", ")}})
